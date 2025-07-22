@@ -137,4 +137,98 @@ export const ReplySchemas = {
       success: { type: "boolean", example: true },
     },
   },
+  CreateReplyInput: {
+    type: "object",
+    required: ["content"],
+    properties: {
+      content: {
+        type: "string",
+        example: "This is a reply to the comment.",
+      },
+    },
+  },
+
+  CreateReplyResponse: {
+    type: "object",
+    required: ["success", "message", "data"],
+    properties: {
+      success: { type: "boolean", example: true },
+      message: { type: "string", example: "Reply created successfully" },
+      data: {
+        type: "object",
+        required: [
+          "reply_id",
+          "comment_id",
+          "user_id",
+          "content",
+          "created_at",
+          "updated_at",
+          "edited",
+          "likes_count",
+          "dislikes_count",
+          "username",
+        ],
+        properties: {
+          reply_id: { type: "string", format: "uuid" },
+          comment_id: { type: "string", format: "uuid" },
+          user_id: { type: "string", format: "uuid" },
+          username: { type: "string", example: "sabari" },
+          content: { type: "string" },
+          created_at: { type: "string", format: "date-time" },
+          updated_at: { type: "string", format: "date-time" },
+          edited: { type: "boolean", example: false },
+          likes_count: { type: "integer", example: 0 },
+          dislikes_count: { type: "integer", example: 0 },
+        },
+      },
+    },
+  },
+
+  LikeDislikeReplyInput: {
+    type: "object",
+    required: ["liked"],
+    properties: {
+      liked: {
+        type: "boolean",
+        example: true,
+        description: "`true` for like, `false` for dislike",
+      },
+    },
+  },
+
+  LikeDislikeReplyResponse: {
+    type: "object",
+    required: ["success", "message", "data"],
+    properties: {
+      success: { type: "boolean", example: true },
+      message: { type: "string", example: "Reply like/dislike updated" },
+      data: {
+        type: "object",
+        required: ["likes_count", "dislikes_count", "liked"],
+        properties: {
+          likes_count: { type: "integer", example: 3 },
+          dislikes_count: { type: "integer", example: 1 },
+          liked: { type: "boolean", example: true },
+        },
+      },
+    },
+  },
+
+  RemoveLikeDislikeReplyResponse: {
+    type: "object",
+    required: ["success", "message"],
+    properties: {
+      success: { type: "boolean", example: true },
+      message: { type: "string", example: "Like/dislike removed from reply" },
+    },
+  },
+
+  DeleteReplyResponse: {
+    type: "object",
+    required: ["success", "message"],
+    properties: {
+      success: { type: "boolean", example: true },
+      message: { type: "string", example: "Reply deleted successfully" },
+    },
+  },
 };

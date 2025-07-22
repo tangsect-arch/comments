@@ -235,9 +235,9 @@ export const commentSchemas = {
   LikeDislikeCommentsResponse: {
     type: "object",
     properties: {
-      message: { type: "string", example: "Comment liked/disliked" },
       success: { type: "boolean", example: true },
-      data: { type: "array", items: [] },
+      message: { type: "string", example: "Comment liked successfully" },
+      data: { $ref: "#/components/schemas/CommentResponse" },
     },
   },
 
@@ -320,12 +320,11 @@ export const commentSchemas = {
     },
   },
 
-  RemoveLikeUnlikeResponse: {
+  RemoveLikeUnlikeCommentsResponse: {
     type: "object",
     properties: {
-      message: { type: "string", example: "Like/dislike removed" },
       success: { type: "boolean", example: true },
-      data: { type: "array", items: [] },
+      message: { type: "string", example: "Like/dislike removed successfully" },
     },
   },
 };

@@ -1,3 +1,6 @@
+import { apiSchemas } from "../schema/schema";
+import { ReplySchemas as replySchemas } from "./../schema/reply.swagger";
+
 export const replyDocs = {
   "/videos/{video_id}/comment/{comment_id}/replies": {
     get: {
@@ -8,46 +11,60 @@ export const replyDocs = {
           in: "path",
           name: "video_id",
           required: true,
-          schema: { type: "string" },
+          schema: { type: "string", format: "uuid" },
         },
         {
           in: "path",
           name: "comment_id",
           required: true,
-          schema: { type: "string" },
+          schema: { type: "string", format: "uuid" },
         },
       ],
       responses: {
-        200: { description: "Replies fetched" },
+        200: {
+          description: "Replies fetched successfully",
+          content: {
+            "application/json": {
+              schema: replySchemas.FetchAllRepliesResponse,
+            },
+          },
+        },
       },
     },
     post: {
-      summary: "Create reply to comment",
+      summary: "Create reply to a comment",
       tags: ["Replies"],
       parameters: [
         {
           in: "path",
           name: "video_id",
           required: true,
-          schema: { type: "string" },
+          schema: { type: "string", format: "uuid" },
         },
         {
           in: "path",
           name: "comment_id",
           required: true,
-          schema: { type: "string" },
+          schema: { type: "string", format: "uuid" },
         },
       ],
       requestBody: {
         required: true,
         content: {
           "application/json": {
-            schema: { $ref: "#/components/schemas/CreateReplyInput" },
+            schema: replySchemas.CreateReplyInput,
           },
         },
       },
       responses: {
-        201: { description: "Reply created" },
+        201: {
+          description: "Reply created successfully",
+          content: {
+            "application/json": {
+              schema: replySchemas.CreateReplyResponse,
+            },
+          },
+        },
       },
     },
   },
@@ -61,23 +78,30 @@ export const replyDocs = {
           in: "path",
           name: "video_id",
           required: true,
-          schema: { type: "string" },
+          schema: { type: "string", format: "uuid" },
         },
         {
           in: "path",
           name: "comment_id",
           required: true,
-          schema: { type: "string" },
+          schema: { type: "string", format: "uuid" },
         },
         {
           in: "path",
           name: "reply_id",
           required: true,
-          schema: { type: "string" },
+          schema: { type: "string", format: "uuid" },
         },
       ],
       responses: {
-        200: { description: "Reply retrieved" },
+        200: {
+          description: "Reply retrieved successfully",
+          content: {
+            "application/json": {
+              schema: replySchemas.FetchReplyByIdResponse,
+            },
+          },
+        },
       },
     },
     delete: {
@@ -88,61 +112,75 @@ export const replyDocs = {
           in: "path",
           name: "video_id",
           required: true,
-          schema: { type: "string" },
+          schema: { type: "string", format: "uuid" },
         },
         {
           in: "path",
           name: "comment_id",
           required: true,
-          schema: { type: "string" },
+          schema: { type: "string", format: "uuid" },
         },
         {
           in: "path",
           name: "reply_id",
           required: true,
-          schema: { type: "string" },
+          schema: { type: "string", format: "uuid" },
         },
       ],
       responses: {
-        200: { description: "Reply deleted" },
+        200: {
+          description: "Reply deleted successfully",
+          content: {
+            "application/json": {
+              schema: replySchemas.DeleteReplyResponse,
+            },
+          },
+        },
       },
     },
   },
 
   "/videos/{video_id}/comment/{comment_id}/replies/{reply_id}/like-dislike": {
     patch: {
-      summary: "Like/dislike a reply",
+      summary: "Like or dislike a reply",
       tags: ["Replies"],
       parameters: [
         {
           in: "path",
           name: "video_id",
           required: true,
-          schema: { type: "string" },
+          schema: { type: "string", format: "uuid" },
         },
         {
           in: "path",
           name: "comment_id",
           required: true,
-          schema: { type: "string" },
+          schema: { type: "string", format: "uuid" },
         },
         {
           in: "path",
           name: "reply_id",
           required: true,
-          schema: { type: "string" },
+          schema: { type: "string", format: "uuid" },
         },
       ],
       requestBody: {
         required: true,
         content: {
           "application/json": {
-            schema: { $ref: "#/components/schemas/LikeDislikeReplyInput" },
+            schema: replySchemas.LikeDislikeReplyInput,
           },
         },
       },
       responses: {
-        200: { description: "Like/dislike updated" },
+        200: {
+          description: "Like/dislike updated successfully",
+          content: {
+            "application/json": {
+              schema: replySchemas.LikeDislikeReplyResponse,
+            },
+          },
+        },
       },
     },
   },
@@ -157,29 +195,36 @@ export const replyDocs = {
             in: "path",
             name: "video_id",
             required: true,
-            schema: { type: "string" },
+            schema: { type: "string", format: "uuid" },
           },
           {
             in: "path",
             name: "comment_id",
             required: true,
-            schema: { type: "string" },
+            schema: { type: "string", format: "uuid" },
           },
           {
             in: "path",
             name: "reply_id",
             required: true,
-            schema: { type: "string" },
+            schema: { type: "string", format: "uuid" },
           },
           {
             in: "path",
             name: "reply_like_id",
             required: true,
-            schema: { type: "string" },
+            schema: { type: "string", format: "uuid" },
           },
         ],
         responses: {
-          200: { description: "Like/dislike removed" },
+          200: {
+            description: "Like/dislike removed successfully",
+            content: {
+              "application/json": {
+                schema: replySchemas.RemoveLikeDislikeReplyResponse,
+              },
+            },
+          },
         },
       },
     },

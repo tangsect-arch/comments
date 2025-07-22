@@ -27,18 +27,19 @@ export const commentDocs = {
           schema: {
             type: "integer",
           },
-          description: "Maximum number of videos to return",
+          description: "Maximum number of comments to return",
         },
         {
           in: "query",
           name: "sort",
           schema: { type: "string", example: "rated" },
-          description: "Sort by values. Either rated or empty",
+          description:
+            "Sort by values. Either 'rated' or leave empty for latest",
         },
       ],
       responses: {
         200: {
-          description: "Comments fetched",
+          description: "Comments fetched successfully",
           content: {
             "application/json": {
               schema: commentSchemas.FetchAllCommentsResponse,
@@ -68,12 +69,15 @@ export const commentDocs = {
       },
       responses: {
         201: {
-          description: "Comment created",
+          description: "Comment created successfully",
           content: {
             "application/json": {
               schema: commentSchemas.CreateCommentsResponse,
             },
           },
+        },
+        400: {
+          description: "Invalid request body",
         },
       },
     },
@@ -100,24 +104,26 @@ export const commentDocs = {
           in: "query",
           name: "created_at",
           required: true,
-          schema: { type: "string" },
-          description: "created at",
+          schema: { type: "string", format: "date-time" },
+          description: "The created_at timestamp of the comment",
         },
       ],
-
       responses: {
         200: {
-          description: "Comment retrieved",
+          description: "Comment retrieved successfully",
           content: {
             "application/json": {
               schema: commentSchemas.FetchCommentByIdResponse,
             },
           },
         },
+        404: {
+          description: "Comment not found",
+        },
       },
     },
     put: {
-      summary: "Update comment",
+      summary: "Update a comment",
       tags: ["Comments"],
       parameters: [
         {
@@ -143,12 +149,18 @@ export const commentDocs = {
       },
       responses: {
         200: {
-          description: "Comment updated",
+          description: "Comment updated successfully",
           content: {
             "application/json": {
               schema: commentSchemas.UpdateCommentsResponse,
             },
           },
+        },
+        400: {
+          description: "Invalid update input",
+        },
+        404: {
+          description: "Comment not found",
         },
       },
     },
@@ -191,28 +203,19 @@ export const commentDocs = {
         },
       },
       responses: {
-        "200": {
+        200: {
           description: "Like/dislike updated successfully",
           content: {
             "application/json": {
-              schema: {
-                type: "object",
-                properties: {
-                  success: {
-                    type: "boolean",
-                    example: true,
-                  },
-                  message: {
-                    type: "string",
-                    example: "Comment liked successfully",
-                  },
-                  data: {
-                    $ref: "#/components/schemas/CommentResponse",
-                  },
-                },
-              },
+              schema: commentSchemas.LikeDislikeCommentsResponse,
             },
           },
+        },
+        400: {
+          description: "Invalid input",
+        },
+        404: {
+          description: "Comment not found",
         },
       },
     },
@@ -251,7 +254,17 @@ export const commentDocs = {
         },
       },
       responses: {
-        200: { description: "Like/dislike removed" },
+        200: {
+          description: "Like/dislike removed successfully",
+          content: {
+            "application/json": {
+              schema: commentSchemas.RemoveLikeUnlikeCommentsResponse,
+            },
+          },
+        },
+        404: {
+          description: "Like/dislike not found",
+        },
       },
     },
   },
