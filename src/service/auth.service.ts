@@ -18,7 +18,7 @@ export const loginService = async (req: Request) => {
   const result = await scyllaClient.execute(
     authQueries.getUserByEmail,
     [email],
-    { prepare: true }
+    { prepare: true },
   );
 
   if (result.rowLength === 0) {
@@ -70,7 +70,7 @@ export const registerService = async (req: Request) => {
   const check = await scyllaClient.execute(
     authQueries.getUserByEmail,
     [email],
-    { prepare: true }
+    { prepare: true },
   );
 
   if (check.rowLength > 0) {
@@ -105,7 +105,7 @@ export const registerService = async (req: Request) => {
       newUser.provider,
       newUser.google_id,
     ],
-    { prepare: true }
+    { prepare: true },
   );
 
   logger.info("User registered successfully", {

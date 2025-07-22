@@ -36,14 +36,14 @@ export const hashPassword = async (password: string): Promise<string> => {
 
 export const isPasswordValid = async (
   plainText: string,
-  hashed: string
+  hashed: string,
 ): Promise<boolean> => {
   return await bcrypt.compare(plainText, hashed);
 };
 
 export const isPasswordMatch = async (
   password: string,
-  userPassword: string
+  userPassword: string,
 ): Promise<boolean> => {
   const isMatch = await bcrypt.compare(password, userPassword);
   return isMatch;
@@ -57,7 +57,7 @@ export const getRating = (
   created_at: Date,
   likes: number,
   dislikes: number,
-  replies: number
+  replies: number,
 ): number => {
   const now = new Date();
   created_at = new Date(created_at);
@@ -75,4 +75,3 @@ export const getRating = (
 
   return parseFloat(clampedScore.toFixed(2));
 };
-

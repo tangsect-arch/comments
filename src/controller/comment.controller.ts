@@ -87,7 +87,7 @@ export const likeDislikeAComment = async (req: Request, res: Response) => {
 
 export const removeLikeDislikeForComment = async (
   req: Request,
-  res: Response
+  res: Response,
 ) => {
   try {
     const result = await removeLikeDislikeForCommentServices(req);

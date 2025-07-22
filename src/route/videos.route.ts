@@ -43,15 +43,15 @@ router
   .put("/:video_id/comments/:comment_id/like-dislike", likeDislikeAComment)
   .put(
     "/:video_id/comments/:comment_id/like-dislike/:comment_like_id",
-    removeLikeDislikeForComment
+    removeLikeDislikeForComment,
   )
   .patch(
     "/:video_id/comments/:comment_id/replies/:reply_id/like-dislike",
-    likeDislikeAReply
+    likeDislikeAReply,
   )
   .delete(
     "/:video_id/comments/:comment_id/replies/:reply_id/like-dislike/:reply_like_id",
-    removeLikeDislikeForReply
+    removeLikeDislikeForReply,
   );
 
 export default router;

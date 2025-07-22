@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS ${env.SCYLLADB_KEYSPACE}.users (
   email TEXT,
   password TEXT,
   provider TEXT,
+  google_id TEXT,
   created_at TIMESTAMP
 );
 
@@ -28,6 +29,7 @@ CREATE TABLE IF NOT EXISTS ${env.SCYLLADB_KEYSPACE}.videos (
 );
 
 CREATE TABLE IF NOT EXISTS ${env.SCYLLADB_KEYSPACE}.comments_by_created_at (
+  username TEXT,
   video_id TEXT,
   rating_score DOUBLE,
   comment_id UUID,
@@ -43,6 +45,7 @@ CREATE TABLE IF NOT EXISTS ${env.SCYLLADB_KEYSPACE}.comments_by_created_at (
 ) WITH CLUSTERING ORDER BY (created_at DESC, comment_id ASC);
 
 CREATE TABLE IF NOT EXISTS ${env.SCYLLADB_KEYSPACE}.comments_by_rating_score (
+  username TEXT,
   video_id TEXT,
   rating_score DOUBLE,
   comment_id UUID,
@@ -58,6 +61,7 @@ CREATE TABLE IF NOT EXISTS ${env.SCYLLADB_KEYSPACE}.comments_by_rating_score (
 ) WITH CLUSTERING ORDER BY (rating_score DESC, comment_id ASC);
 
 CREATE TABLE IF NOT EXISTS ${env.SCYLLADB_KEYSPACE}.replies (
+  username TEXT,
   reply_id UUID,
   comment_id UUID,
   user_id UUID,
@@ -82,5 +86,5 @@ CREATE TABLE IF NOT EXISTS ${env.SCYLLADB_KEYSPACE}.reply_likes (
   comment_id UUID,
   user_id UUID,
   liked BOOLEAN,
-  PRIMARY KEY (reply_id, user_id)
+  PRIMARY KEY (reply_id, comment_id, user_id)
 );

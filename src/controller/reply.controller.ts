@@ -25,12 +25,10 @@ export const fetchAllReplies = async (req: Request, res: Response) => {
 export const fetchReplyById = async (req: Request, res: Response) => {
   try {
     const result = await fetchReplyByIdService(req);
-    const status = result.data.length>0 ? 200 : 204;
+    const status = result.data.length > 0 ? 200 : 204;
     return res
       .status(status)
-      .json(
-         successResponse(result.message, result.data)
-      );
+      .json(successResponse(result.message, result.data));
   } catch (err) {
     throw Object.assign(new Error("Failed to fetch reply"), {
       status: 500,
@@ -60,7 +58,6 @@ export const updateReply = async (req: Request, res: Response) => {
       status: 500,
       details: err,
     });
-    
   }
 };
 
@@ -73,7 +70,6 @@ export const deleteReply = async (req: Request, res: Response) => {
       status: 500,
       details: err,
     });
-    
   }
 };
 
@@ -86,12 +82,12 @@ export const likeDislikeAReply = async (req: Request, res: Response) => {
       status: 500,
       details: err,
     });
-  };
-}
+  }
+};
 
 export const removeLikeDislikeForReply = async (
   req: Request,
-  res: Response
+  res: Response,
 ) => {
   try {
     const result = await removeLikeDislikeForReplyService(req);

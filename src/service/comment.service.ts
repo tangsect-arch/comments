@@ -14,13 +14,13 @@ export const fetchAllCommentsService = async (req: Request) => {
     result = await scyllaClient.execute(
       commentQueries.getByRating,
       [video_id, +limit],
-      { prepare: true }
+      { prepare: true },
     );
   } else {
     result = await scyllaClient.execute(
       commentQueries.getComments,
       [video_id, created_at, +limit],
-      { prepare: true }
+      { prepare: true },
     );
   }
 
@@ -39,7 +39,7 @@ export const fetchCommentByIdService = async (req: Request) => {
   const result = await scyllaClient.execute(
     commentQueries.getCommentsById,
     [video_id, comment_id, date],
-    { prepare: true }
+    { prepare: true },
   );
 
   const found = result.rowLength > 0;
@@ -72,7 +72,7 @@ export const createCommentService = async (req: Request) => {
         false,
         username,
       ],
-      { prepare: true }
+      { prepare: true },
     ),
     scyllaClient.execute(
       commentQueries.insertIntoRatingScore,
@@ -89,7 +89,7 @@ export const createCommentService = async (req: Request) => {
         0,
         username,
       ],
-      { prepare: true }
+      { prepare: true },
     ),
   ];
 
@@ -120,7 +120,7 @@ export const updateCommentsService = async (req: Request) => {
   const existCheck = await scyllaClient.execute(
     commentQueries.getCommentsByUserId,
     [video_id, created_at, comment_id, user_id],
-    { prepare: true }
+    { prepare: true },
   );
 
   if (existCheck.rows[0].length === 0) {
@@ -142,14 +142,14 @@ export const updateCommentsService = async (req: Request) => {
         created_at,
         comment_id,
       ],
-      { prepare: true }
+      { prepare: true },
     ),
     scyllaClient.execute(
       commentQueries.deleteFromRatingScore,
       [video_id, rating_score, comment_id],
       {
         prepare: true,
-      }
+      },
     ),
   ];
 
@@ -170,7 +170,7 @@ export const updateCommentsService = async (req: Request) => {
       reply_count,
       username,
     ],
-    { prepare: true }
+    { prepare: true },
   );
 
   logger.info("Comment updated", { comment_id });
@@ -192,7 +192,7 @@ export const deleteCommentService = async (req: Request) => {
   const existCheck = await scyllaClient.execute(
     commentQueries.getCommentsByUserId,
     [video_id, created_at, comment_id, user_id],
-    { prepare: true }
+    { prepare: true },
   );
 
   if (existCheck.rows[0].length === 0) {
@@ -215,12 +215,12 @@ export const deleteCommentService = async (req: Request) => {
     scyllaClient.execute(
       commentQueries.deleteFromCreatedAt,
       [video_id, created_at, comment_id],
-      { prepare: true }
+      { prepare: true },
     ),
     scyllaClient.execute(
       commentQueries.deleteFromRatingScore,
       [video_id, rating_score, comment_id],
-      { prepare: true }
+      { prepare: true },
     ),
   ];
 
@@ -256,7 +256,7 @@ export const likeDislikeACommentService = async (req: Request) => {
     created_at,
     likes_count,
     dislikes_count,
-    reply_count
+    reply_count,
   );
 
   const resultQueries = await scyllaClient.execute(
@@ -264,7 +264,7 @@ export const likeDislikeACommentService = async (req: Request) => {
     [comment_id, user_id],
     {
       prepare: true,
-    }
+    },
   );
   if (resultQueries.rows.length > 0) {
     throw Object.assign(new Error("Action not allowed"), {
@@ -279,7 +279,7 @@ export const likeDislikeACommentService = async (req: Request) => {
       [comment_id, user_id, liked],
       {
         prepare: true,
-      }
+      },
     ),
     scyllaClient.execute(
       commentQueries.updateCreatedAt,
@@ -296,14 +296,14 @@ export const likeDislikeACommentService = async (req: Request) => {
       ],
       {
         prepare: true,
-      }
+      },
     ),
     scyllaClient.execute(
       commentQueries.deleteFromRatingScore,
       [video_id, rating_score, comment_id],
       {
         prepare: true,
-      }
+      },
     ),
   ];
 
@@ -326,7 +326,7 @@ export const likeDislikeACommentService = async (req: Request) => {
     ],
     {
       prepare: true,
-    }
+    },
   );
 
   logger.info("Comment like/dislike added", { comment_id, user_id });
@@ -358,7 +358,7 @@ export const removeLikeDislikeForCommentServices = async (req: Request) => {
     created_at,
     likes_count,
     dislikes_count,
-    reply_count
+    reply_count,
   );
 
   const resultQueries = await scyllaClient.execute(
@@ -366,7 +366,7 @@ export const removeLikeDislikeForCommentServices = async (req: Request) => {
     [comment_id, user_id],
     {
       prepare: true,
-    }
+    },
   );
   if (resultQueries.rows.length === 0) {
     throw Object.assign(new Error("Action not allowed"), {
@@ -394,14 +394,14 @@ export const removeLikeDislikeForCommentServices = async (req: Request) => {
       ],
       {
         prepare: true,
-      }
+      },
     ),
     scyllaClient.execute(
       commentQueries.deleteFromRatingScore,
       [video_id, rating_score, comment_id],
       {
         prepare: true,
-      }
+      },
     ),
   ];
 
@@ -424,7 +424,7 @@ export const removeLikeDislikeForCommentServices = async (req: Request) => {
     ],
     {
       prepare: true,
-    }
+    },
   );
 
   logger.info("Comment like/dislike removed", { comment_id, user_id });

@@ -2,7 +2,7 @@ import { SuccessResponse } from "../entities/entities";
 
 export const successResponse = <T = any>(
   message: string,
-  data?: T
+  data?: T,
 ): SuccessResponse<T> => ({
   success: true,
   message,
