@@ -34,3 +34,19 @@ created at
 rating
 
 rating depends on no of likes dislikes and replies
+
+# Sample .env
+
+PORT=5000
+NODE_ENV=dev
+SCYLLADB_HOST=
+SCYLLADB_DATACENTER=
+SCYLLADB_KEYSPACE=
+SCYLLADB_USERNAME=
+SCYLLADB_PASSWORD=
+AccessKey=
+SecretKey=
+JWT_SECRET=
+JWT_EXPIRATION=
+PASSWORD_SALT_ROUNDS=
+CORS_ORIGIN=
