@@ -12,7 +12,8 @@ export const commentQueries = {
     LIMIT ?`,
 
   getCommentsByUserId: `
-    SELECT * FROM ${env.SCYLLADB_KEYSPACE}.comments_by_created_at WHERE video_id = ? AND comment_id = ? AND created_at = ? AND user_id = ? ALLOW FILTERING;`,
+    SELECT * FROM ${env.SCYLLADB_KEYSPACE}.comments_by_created_at
+    WHERE video_id = ? AND comment_id = ? AND created_at = ? AND user_id = ? ALLOW FILTERING;`,
 
   getCommentsById: `
     SELECT * FROM ${env.SCYLLADB_KEYSPACE}.comments_by_created_at

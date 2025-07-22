@@ -282,7 +282,6 @@ export const likeDislikeACommentService = async (req: Request) => {
       commentQueries.updateCreatedAt,
       [
         content,
-        edited,
         newRating,
         likes_count,
         dislikes_count,
