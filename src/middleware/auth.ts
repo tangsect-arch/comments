@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { env } from "../config/env";
-import { User } from "../entities/user";
+import { User } from "../entities/entities";
 
 declare global {
   namespace Express {
@@ -14,7 +14,7 @@ declare global {
 export const authMiddleware = (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   const authHeader = req.headers.authorization;
 
@@ -26,7 +26,10 @@ export const authMiddleware = (
 
   try {
     const decoded = jwt.verify(token, env.JWT_SECRET) as User;
+    const { user_id, username } = decoded;
     req.user = decoded;
+    req.user_id = user_id;
+    req.username = username;
     next();
   } catch (err) {
     return res.status(403).json({ error: "Forbidden" });
