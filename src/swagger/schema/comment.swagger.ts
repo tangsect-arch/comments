@@ -155,12 +155,79 @@ export const commentSchemas = {
 
   LikeDislikeCommentsInput: {
     type: "object",
-    required: ["liked"],
+    required: [
+      "video_id",
+      "comment_id",
+      "user_id",
+      "username",
+      "content",
+      "created_at",
+      "updated_at",
+      "likes_count",
+      "dislikes_count",
+      "reply_count",
+      "edited",
+      "rating_score",
+      "liked",
+    ],
     properties: {
+      video_id: {
+        type: "string",
+        format: "uuid",
+        example: "f1236e7b-9d6d-4878-b5f9-25692ecbdd4c",
+      },
+      comment_id: {
+        type: "string",
+        format: "uuid",
+        example: "1cbcb300-bd0a-45e1-b5cf-1f743874bafe",
+      },
+      user_id: {
+        type: "string",
+        format: "uuid",
+        example: "b64db4ac-cf58-47b4-aecb-1772d74271b8",
+      },
+      username: {
+        type: "string",
+        example: "sabari",
+      },
+      content: {
+        type: "string",
+        example: "New comment goes here 107",
+      },
+      created_at: {
+        type: "string",
+        format: "date-time",
+        example: "2025-07-22T12:58:23.093Z",
+      },
+      updated_at: {
+        type: "string",
+        format: "date-time",
+        example: "2025-07-22T12:58:22.643Z",
+      },
+      likes_count: {
+        type: "integer",
+        example: 2,
+      },
+      dislikes_count: {
+        type: "integer",
+        example: 0,
+      },
+      reply_count: {
+        type: "integer",
+        example: 0,
+      },
+      edited: {
+        type: "boolean",
+        example: false,
+      },
+      rating_score: {
+        type: "number",
+        format: "float",
+        example: 1,
+      },
       liked: {
         type: "boolean",
         example: true,
-        description: "`true` = like, `false` = dislike",
       },
     },
   },
@@ -176,10 +243,80 @@ export const commentSchemas = {
 
   RemoveLikeUnlikeCommentsInput: {
     type: "object",
-    required: ["comment_id", "user_id"],
+    required: [
+      "video_id",
+      "comment_id",
+      "user_id",
+      "username",
+      "content",
+      "created_at",
+      "updated_at",
+      "likes_count",
+      "dislikes_count",
+      "reply_count",
+      "edited",
+      "rating_score",
+      "liked",
+    ],
     properties: {
-      comment_id: { type: "string", format: "uuid" },
-      user_id: { type: "string", format: "uuid" },
+      video_id: {
+        type: "string",
+        format: "uuid",
+        example: "f1236e7b-9d6d-4878-b5f9-25692ecbdd4c",
+      },
+      comment_id: {
+        type: "string",
+        format: "uuid",
+        example: "1cbcb300-bd0a-45e1-b5cf-1f743874bafe",
+      },
+      user_id: {
+        type: "string",
+        format: "uuid",
+        example: "b64db4ac-cf58-47b4-aecb-1772d74271b8",
+      },
+      username: {
+        type: "string",
+        example: "sabari",
+      },
+      content: {
+        type: "string",
+        example: "New comment goes here 107",
+      },
+      created_at: {
+        type: "string",
+        format: "date-time",
+        example: "2025-07-22T12:58:23.093Z",
+      },
+      updated_at: {
+        type: "string",
+        format: "date-time",
+        example: "2025-07-22T12:58:22.643Z",
+      },
+      likes_count: {
+        type: "integer",
+        example: 2,
+      },
+      dislikes_count: {
+        type: "integer",
+        example: 0,
+      },
+      reply_count: {
+        type: "integer",
+        example: 0,
+      },
+      edited: {
+        type: "boolean",
+        example: false,
+      },
+      rating_score: {
+        type: "number",
+        format: "float",
+        example: 1,
+      },
+      liked: {
+        type: "boolean",
+        example: true,
+      },
     },
   },
 

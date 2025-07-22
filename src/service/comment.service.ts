@@ -39,7 +39,7 @@ export const fetchCommentByIdService = async (req: Request) => {
   const date = new Date(created_at_string);
   const result = await scyllaClient.execute(
     commentQueries.getCommentsById,
-    [video_id, comment_id, date],
+    [video_id, comment_id],
     { prepare: true }
   );
 
@@ -379,7 +379,6 @@ export const removeLikeDislikeForCommentServices = async (req: Request) => {
       commentQueries.updateCreatedAt,
       [
         content,
-        edited,
         newRating,
         likes_count,
         dislikes_count,

@@ -20,6 +20,7 @@ import {
   fetchReplyById,
   likeDislikeAReply,
   removeLikeDislikeForReply,
+  updateReply,
 } from "../controller/reply.controller";
 import { authMiddleware } from "../middleware/auth";
 import { logger } from "../utils/logger";
@@ -38,7 +39,8 @@ router
 
   .get("/:video_id/comments/:comment_id/replies", fetchAllReplies)
   .post("/:video_id/comments/:comment_id/replies", authMiddleware, createReply)
-  .put("/:video_id/comments/:comment_id/replies/:reply_id", fetchReplyById)
+  .get("/:video_id/comments/:comment_id/replies/:reply_id", fetchReplyById)
+  .put("/:video_id/comments/:comment_id/replies/:reply_id", updateReply)
   .delete(
     "/:video_id/comments/:comment_id/replies/:reply_id",
     authMiddleware,
@@ -50,12 +52,12 @@ router
     authMiddleware,
     likeDislikeAComment
   )
-  .put(
-    "/:video_id/comments/:comment_id/like-dislike/:comment_like_id",
+  .patch(
+    "/:video_id/comments/:comment_id/like-dislike",
     authMiddleware,
     removeLikeDislikeForComment
   )
-  .post(
+  .patch(
     "/:video_id/comments/:comment_id/replies/:reply_id/like-dislike",
     authMiddleware,
     likeDislikeAReply

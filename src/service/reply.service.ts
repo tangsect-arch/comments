@@ -11,13 +11,13 @@ export const fetchAllRepliesService = async (req: Request) => {
   const created_at =
     cursor ||
     new Date(
-      new Date().setFullYear(new Date().getFullYear() - 1),
+      new Date().setFullYear(new Date().getFullYear() - 1)
     ).toISOString();
 
   const result = await scyllaClient.execute(
     replyQueries.getByCommentId,
     [comment_id, created_at, +limit],
-    { prepare: true },
+    { prepare: true }
   );
 
   logger.info("Replies fetched", { comment_id, count: result.rowLength });
@@ -29,12 +29,15 @@ export const fetchAllRepliesService = async (req: Request) => {
 };
 
 export const fetchReplyByIdService = async (req: Request) => {
-  const { reply_id } = req.params;
-  const query = "SELECT * FROM replies WHERE reply_id = ?";
+  const { reply_id, comment_id } = req.params;
 
-  const result = await scyllaClient.execute(query, [reply_id], {
-    prepare: true,
-  });
+  const result = await scyllaClient.execute(
+    replyQueries.getByReplyId,
+    [comment_id, reply_id],
+    {
+      prepare: true,
+    }
+  );
 
   const found = result.rowLength > 0;
   logger.info("Fetch reply by ID", { reply_id, found });
@@ -60,7 +63,7 @@ export const createReplyService = async (req: Request) => {
     [reply_id, comment_id, user_id, content, now, now, false, 0, 0, username],
     {
       prepare: true,
-    },
+    }
   );
 
   await updateCommentTable(
@@ -69,7 +72,7 @@ export const createReplyService = async (req: Request) => {
     user_id,
     username,
     date,
-    "add",
+    "add"
   );
 
   logger.info("Reply created and comment updated", {
@@ -88,13 +91,14 @@ export const createReplyService = async (req: Request) => {
 export const updateReplyService = async (req: Request) => {
   const { reply_id, comment_id } = req.params;
   const { content, created_at } = req.body;
+  const now = new Date(created_at as string);
 
   await scyllaClient.execute(
     replyQueries.update,
-    [content, comment_id, created_at, reply_id],
+    [content, comment_id, now, reply_id],
     {
       prepare: true,
-    },
+    }
   );
 
   logger.info("Reply updated", { reply_id });
@@ -122,7 +126,7 @@ export const deleteReplyService = async (req: Request) => {
     user_id,
     username,
     date,
-    "remove",
+    "remove"
   );
 
   logger.info("Reply and related data deleted", { reply_id, comment_id });
@@ -144,7 +148,7 @@ export const likeDislikeAReplyService = async (req: Request) => {
     [reply_id, comment_id, user_id],
     {
       prepare: true,
-    },
+    }
   );
   if (exist.rows.length > 0) {
     throw Object.assign(new Error("Action not allowed"), {
@@ -158,14 +162,14 @@ export const likeDislikeAReplyService = async (req: Request) => {
       [reply_id, comment_id, user_id, liked],
       {
         prepare: true,
-      },
+      }
     ),
     scyllaClient.execute(
       replyQueries.updateCounts,
       [likes_count, dislikes_count, comment_id, date, reply_id],
       {
         prepare: true,
-      },
+      }
     ),
   ]);
 
@@ -188,7 +192,7 @@ export const removeLikeDislikeForReplyService = async (req: Request) => {
     [reply_id, comment_id, user_id],
     {
       prepare: true,
-    },
+    }
   );
   if (exist.rows.length === 0) {
     throw Object.assign(new Error("Action not allowed"), {
@@ -203,14 +207,14 @@ export const removeLikeDislikeForReplyService = async (req: Request) => {
       [reply_id, comment_id, user_id],
       {
         prepare: true,
-      },
+      }
     ),
     scyllaClient.execute(
       replyQueries.updateCounts,
       [likes_count, dislikes_count, comment_id, date, reply_id],
       {
         prepare: true,
-      },
+      }
     ),
   ]);
 
@@ -228,12 +232,12 @@ async function updateCommentTable(
   user_id: string,
   username: string,
   date: Date,
-  type: string,
+  type: string
 ) {
   const result = await scyllaClient.execute(
     commentQueries.getCommentsById,
-    [video_id, comment_id, date],
-    { prepare: true },
+    [video_id, comment_id],
+    { prepare: true }
   );
 
   let {
@@ -252,19 +256,19 @@ async function updateCommentTable(
     created_at,
     likes_count,
     dislikes_count,
-    reply_count,
+    reply_count
   );
 
   const query = [
     scyllaClient.execute(
       commentQueries.updateReplyCountAndRating,
       [reply_count, newRating, video_id, created_at, comment_id],
-      { prepare: true },
+      { prepare: true }
     ),
     scyllaClient.execute(
       commentQueries.deleteFromRatingScore,
       [video_id, rating_score, comment_id],
-      { prepare: true },
+      { prepare: true }
     ),
   ];
 
@@ -285,7 +289,7 @@ async function updateCommentTable(
       reply_count,
       username,
     ],
-    { prepare: true },
+    { prepare: true }
   );
   return {};
 }

@@ -17,7 +17,7 @@ export const commentQueries = {
 
   getCommentsById: `
     SELECT * FROM ${env.SCYLLADB_KEYSPACE}.comments_by_created_at
-    WHERE video_id = ? AND comment_id = ? AND created_at = ? ALLOW FILTERING;`,
+    WHERE video_id = ? AND comment_id = ? ALLOW FILTERING;`,
 
   insertIntoCreatedAt: `
     INSERT INTO ${env.SCYLLADB_KEYSPACE}.comments_by_created_at (
@@ -117,60 +117,4 @@ export const commentQueries = {
   UPDATE ${env.SCYLLADB_KEYSPACE}.comments_by_created_at 
   SET reply_count = ?, rating_score = ? WHERE video_id = ?
   AND created_at = ? AND comment_id = ?;`,
-
-  insertCommentCounters: `insert into ${env.SCYLLADB_KEYSPACE}.comment_counters 
-  (video_id, comment_id, likes_count, dislikes_count, reply_count) values (?, ?, 0, 0, 0);`,
-
-  incrimentCommentCounterLike: `
-  UPDATE ${env.SCYLLADB_KEYSPACE}.comment_counters 
-  SET likes_count = likes_count + 1 WHERE video_id = ?
-  AND comment_id = ?;
-  `,
-
-  incrimentCommentCounterDislike: `
-  UPDATE ${env.SCYLLADB_KEYSPACE}.comment_counters 
-  SET dislikes_count = dislikes_count + 1 WHERE video_id = ?
-  AND comment_id = ?;
-  `,
-
-  incrimentCommentCounterReply: `
-  UPDATE ${env.SCYLLADB_KEYSPACE}.comment_counters 
-  SET reply_count = reply_count + 1 WHERE video_id = ?
-  AND comment_id = ?;
-  `,
-
-  decrimentCommentCounterLike: `
-  UPDATE ${env.SCYLLADB_KEYSPACE}.comment_counters 
-  SET likes_count = likes_count - 1 WHERE video_id = ?
-  AND comment_id = ?;
-  `,
-
-  decrimentCommentCounterDislike: `
-  UPDATE ${env.SCYLLADB_KEYSPACE}.comment_counters 
-  SET dislikes_count = dislikes_count - 1 WHERE video_id = ?
-  AND comment_id = ?;
-  `,
-
-  decrimentCommentCounterReply: `
-  UPDATE ${env.SCYLLADB_KEYSPACE}.comment_counters 
-  SET reply_count = reply_count - 1 WHERE video_id = ?
-  AND comment_id = ?;
-  `,
-
-  deleteCommentCounter: `
-  DELETE from ${env.SCYLLADB_KEYSPACE}.comment_counters 
-  SET reply_count = ?, rating_score = ? WHERE video_id = ?
-  AND created_at = ? AND comment_id = ?;
-  `,
-
-  updateCommentRating: `
-  UPDATE ${env.SCYLLADB_KEYSPACE}.comments_by_created_at 
-  SET rating_score = ? WHERE video_id = ?
-  AND comment_id = ? AND created_at = ?;
-  `,
-
-  commentCounterData: `
-  SELECT * FROM ${env.SCYLLADB_KEYSPACE}.comment_counters
-  WHERE video_id = ? AND comment_id = ?
-  `,
 };
