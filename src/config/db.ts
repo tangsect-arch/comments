@@ -1,5 +1,6 @@
 import cassandra from "cassandra-driver";
 import { env } from "./env";
+import { logger } from "../utils/logger";
 
 export const scyllaClient = new cassandra.Client({
   contactPoints: [env.SCYLLADB_HOST],
@@ -11,9 +12,10 @@ export const scyllaClient = new cassandra.Client({
   keyspace: undefined,
 });
 
-const schema = `
-DROP KEYSPACE youtube_clone;
+//DROP KEYSPACE ${env.SCYLLADB_KEYSPACE};
 
+const schema = `
+DROP KEYSPACE ${env.SCYLLADB_KEYSPACE};
 CREATE KEYSPACE IF NOT EXISTS ${env.SCYLLADB_KEYSPACE}
 WITH replication = {
   'class': 'SimpleStrategy',
@@ -41,12 +43,13 @@ CREATE TABLE IF NOT EXISTS ${env.SCYLLADB_KEYSPACE}.videos (
   user_id UUID,
   title TEXT,
   description TEXT,
-  created_at TIMESTAMP
+  created_at TIMESTAMP,
+  username TEXT
 );
 
 CREATE TABLE IF NOT EXISTS ${env.SCYLLADB_KEYSPACE}.comments_by_created_at (
   username TEXT,
-  video_id TEXT,
+  video_id UUID,
   rating_score DOUBLE,
   comment_id UUID,
   user_id UUID,
@@ -62,7 +65,7 @@ CREATE TABLE IF NOT EXISTS ${env.SCYLLADB_KEYSPACE}.comments_by_created_at (
 
 CREATE TABLE IF NOT EXISTS ${env.SCYLLADB_KEYSPACE}.comments_by_rating_score (
   username TEXT,
-  video_id TEXT,
+  video_id UUID,
   rating_score DOUBLE,
   comment_id UUID,
   user_id UUID,
@@ -105,6 +108,7 @@ CREATE TABLE IF NOT EXISTS ${env.SCYLLADB_KEYSPACE}.reply_likes (
   PRIMARY KEY (reply_id, comment_id, user_id)
 );
 
+
 `;
 
 export const initScyllaSchema = async () => {
@@ -116,7 +120,7 @@ export const initScyllaSchema = async () => {
   for (const stmt of statements) {
     try {
       await scyllaClient.execute(stmt);
-      console.log("Executed:", stmt.split("\n")[0]);
+      logger.info("Executed:", stmt.split("\n")[0]);
     } catch (err) {
       console.error("Failed to execute:", stmt, "\n", err);
     }

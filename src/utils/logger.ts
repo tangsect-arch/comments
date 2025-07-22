@@ -10,7 +10,7 @@ const levels = {
 };
 
 const level = () => {
-  return env.NODE_ENV === "development" ? "debug" : "warn";
+  return env.NODE_ENV === "dev" ? "debug" : "warn";
 };
 
 const colors = {
@@ -28,8 +28,8 @@ const format = winston.format.combine(
   winston.format.colorize({ all: true }),
   winston.format.printf(
     (info: winston.Logform.TransformableInfo) =>
-      `${info.timestamp} ${info.level}: ${info.message}`,
-  ),
+      `${info.timestamp} ${info.level}: ${info.message}`
+  )
 );
 
 const transports = [

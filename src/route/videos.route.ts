@@ -22,9 +22,9 @@ import {
   removeLikeDislikeForReply,
 } from "../controller/reply.controller";
 import { authMiddleware } from "../middleware/auth";
+import { logger } from "../utils/logger";
 
 const router = express.Router();
-
 router
   .get("/", getAllVideos)
   .post("/", authMiddleware, uploadVideo)
@@ -55,7 +55,7 @@ router
     authMiddleware,
     removeLikeDislikeForComment
   )
-  .patch(
+  .post(
     "/:video_id/comments/:comment_id/replies/:reply_id/like-dislike",
     authMiddleware,
     likeDislikeAReply

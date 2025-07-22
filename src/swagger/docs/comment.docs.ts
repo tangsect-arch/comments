@@ -137,12 +137,7 @@ export const commentDocs = {
         required: true,
         content: {
           "application/json": {
-            schema: {
-              type: "object",
-              properties: {
-                content: { type: "string" },
-              },
-            },
+            schema: commentSchemas.UpdateCommentsInput,
           },
         },
       },
@@ -160,7 +155,7 @@ export const commentDocs = {
   },
 
   "/videos/{video_id}/comment/{comment_id}/like-dislike": {
-    patch: {
+    post: {
       summary: "Like or dislike a comment",
       tags: ["Comments"],
       parameters: [
@@ -168,25 +163,59 @@ export const commentDocs = {
           in: "path",
           name: "video_id",
           required: true,
-          schema: { type: "string" },
+          schema: {
+            type: "string",
+            format: "uuid",
+            example: "f1236e7b-9d6d-4878-b5f9-25692ecbdd4c",
+          },
+          description: "The UUID of the video",
         },
         {
           in: "path",
           name: "comment_id",
           required: true,
-          schema: { type: "string" },
+          schema: {
+            type: "string",
+            format: "uuid",
+            example: "7e3050a2-58f7-482a-8020-5c2f44c8c024",
+          },
+          description: "The UUID of the comment to like/dislike",
         },
       ],
       requestBody: {
         required: true,
         content: {
           "application/json": {
-            schema: { $ref: "#/components/schemas/LikeDislikeCommentInput" },
+            schema: {
+              $ref: "#/components/schemas/LikeDislikeCommentInput",
+            },
           },
         },
       },
       responses: {
-        200: { description: "Like/dislike updated" },
+        "200": {
+          description: "Like/dislike updated successfully",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  success: {
+                    type: "boolean",
+                    example: true,
+                  },
+                  message: {
+                    type: "string",
+                    example: "Comment liked successfully",
+                  },
+                  data: {
+                    $ref: "#/components/schemas/CommentResponse",
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     },
   },

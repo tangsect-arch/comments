@@ -7,8 +7,8 @@ const PORT: number = parseInt(env.PORT);
 
 (async () => {
   try {
-    await initScyllaSchema();
-    console.log("ScyllaDB schema initialized successfully.");
+    // await initScyllaSchema();
+    logger.info("ScyllaDB schema initialized successfully.");
     app.listen(PORT, () => {
       logger.info(`http://localhost:${PORT}`);
     });

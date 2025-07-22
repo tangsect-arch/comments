@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { env } from "../config/env";
 import { User } from "../entities/entities";
+import { logger } from "../utils/logger";
 
 declare global {
   namespace Express {
@@ -17,19 +18,18 @@ export const authMiddleware = (
   next: NextFunction
 ) => {
   const authHeader = req.headers.authorization;
-
+  console.log(authHeader);
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
   const token = authHeader.split(" ")[1];
-
   try {
     const decoded = jwt.verify(token, env.JWT_SECRET) as User;
     const { user_id, username } = decoded;
-    req.user = decoded;
-    req.user_id = user_id;
-    req.username = username;
+    req.body.user = decoded;
+    req.body.user_id = user_id;
+    req.body.username = username;
     next();
   } catch (err) {
     return res.status(403).json({ error: "Forbidden" });

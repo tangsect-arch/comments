@@ -39,6 +39,7 @@ export const videoDocs = {
                       properties: {
                         video_id: { type: "string", format: "uuid" },
                         user_id: { type: "string", format: "uuid" },
+                        username: { type: "string" },
                         title: { type: "string" },
                         description: { type: "string" },
                         created_at: { type: "string", format: "date-time" },
@@ -64,7 +65,6 @@ export const videoDocs = {
               type: "object",
               required: ["user_id", "title", "description"],
               properties: {
-                user_id: { type: "string", format: "uuid" },
                 title: { type: "string" },
                 description: { type: "string" },
               },
@@ -88,6 +88,7 @@ export const videoDocs = {
                       video_id: { type: "string", format: "uuid" },
                       user_id: { type: "string", format: "uuid" },
                       title: { type: "string" },
+                      username: { type: "string" },
                       description: { type: "string" },
                       created_at: { type: "string", format: "date-time" },
                     },
@@ -137,6 +138,7 @@ export const videoDocs = {
                       title: { type: "string" },
                       description: { type: "string" },
                       created_at: { type: "string", format: "date-time" },
+                      username: { type: "string" },
                     },
                   },
                 },

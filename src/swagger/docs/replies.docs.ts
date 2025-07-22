@@ -53,7 +53,7 @@ export const replyDocs = {
   },
 
   "/videos/{video_id}/comment/{comment_id}/replies/{reply_id}": {
-    put: {
+    get: {
       summary: "Get reply by ID",
       tags: ["Replies"],
       parameters: [

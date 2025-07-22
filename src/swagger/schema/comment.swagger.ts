@@ -90,9 +90,57 @@ export const commentSchemas = {
 
   UpdateCommentsInput: {
     type: "object",
-    required: ["content"],
+    required: [
+      "video_id",
+      "comment_id",
+      "created_at",
+      "content",
+      "likes_count",
+      "dislikes_count",
+      "reply_count",
+      "edited",
+      "rating_score",
+    ],
     properties: {
-      content: { type: "string", example: "Updated comment content" },
+      video_id: {
+        type: "string",
+        format: "uuid",
+        example: "f1236e7b-9d6d-4878-b5f9-25692ecbdd4c",
+      },
+      comment_id: {
+        type: "string",
+        format: "uuid",
+        example: "7e3050a2-58f7-482a-8020-5c2f44c8c024",
+      },
+      created_at: {
+        type: "string",
+        format: "date-time",
+        example: "2025-07-22T12:58:27.683Z",
+      },
+      content: {
+        type: "string",
+        example: "New comment goes here 00108",
+      },
+      likes_count: {
+        type: "integer",
+        example: 0,
+      },
+      dislikes_count: {
+        type: "integer",
+        example: 0,
+      },
+      reply_count: {
+        type: "integer",
+        example: 0,
+      },
+      edited: {
+        type: "boolean",
+        example: false,
+      },
+      rating_score: {
+        type: "number",
+        example: 1,
+      },
     },
   },
 

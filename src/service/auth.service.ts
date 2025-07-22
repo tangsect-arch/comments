@@ -13,8 +13,6 @@ import { logger } from "../utils/logger";
 export const loginService = async (req: Request) => {
   const { email, password } = req.body;
 
-  logger.info("Login attempt", { email });
-
   const result = await scyllaClient.execute(
     authQueries.getUserByEmail,
     [email],
@@ -46,11 +44,6 @@ export const loginService = async (req: Request) => {
   };
   const token = encodeToken(payload);
   const data = { payload, token };
-
-  logger.info("Login successful", {
-    user_id: user.user_id,
-    email: user.email,
-  });
   return { message: "Login successful", success: true, data };
 };
 
@@ -64,8 +57,7 @@ export const registerService = async (req: Request) => {
     provider = "local",
   } = req.body;
 
-  logger.info("Register attempt", { email, username });
-  logger.info("query ", authQueries.insertUser);
+  
 
   const check = await scyllaClient.execute(
     authQueries.getUserByEmail,
@@ -92,8 +84,6 @@ export const registerService = async (req: Request) => {
     google_id,
     created_at: new Date(),
   };
-  logger.info(newUser);
-  logger.info(authQueries.insertUser);
   await scyllaClient.execute(
     authQueries.insertUser,
     [
@@ -107,12 +97,6 @@ export const registerService = async (req: Request) => {
     ],
     { prepare: true },
   );
-
-  logger.info("User registered successfully", {
-    user_id: newUser.user_id,
-    email,
-    username,
-  });
 
   return {
     message: "Registration successful",

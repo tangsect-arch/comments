@@ -11,7 +11,7 @@ export const getAllVideosService = async (req: Request) => {
   const result = await scyllaClient.execute(
     videoQueries.getByVideoAll,
     [created_at, +limit],
-    { prepare: true },
+    { prepare: true }
   );
 
   logger.info("Fetched all videos", { count: result.rowLength });
@@ -31,7 +31,7 @@ export const uploadVideoService = async (req: Request) => {
   await scyllaClient.execute(
     videoQueries.upload,
     [video_id, user_id, title, description, now, username],
-    { prepare: true },
+    { prepare: true }
   );
 
   logger.info("Video uploaded", { video_id, user_id });
@@ -48,7 +48,7 @@ export const getVideoByIdService = async (req: Request) => {
   const result = await scyllaClient.execute(
     videoQueries.getVideoById,
     [video_id],
-    { prepare: true },
+    { prepare: true }
   );
 
   const found = result.rowLength > 0;

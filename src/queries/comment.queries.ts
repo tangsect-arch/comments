@@ -12,12 +12,11 @@ export const commentQueries = {
     LIMIT ?`,
 
   getCommentsByUserId: `
-    SELECT * FROM ${env.SCYLLADB_KEYSPACE}.comments_by_created_at
-    WHERE video_id = ? AND comment_id = ? AND created_at = ? AND user_id = ?`,
+    SELECT * FROM ${env.SCYLLADB_KEYSPACE}.comments_by_created_at WHERE video_id = ? AND comment_id = ? AND created_at = ? AND user_id = ? ALLOW FILTERING;`,
 
   getCommentsById: `
     SELECT * FROM ${env.SCYLLADB_KEYSPACE}.comments_by_created_at
-    WHERE video_id = ? AND comment_id = ? AND created_at = ?`,
+    WHERE video_id = ? AND comment_id = ? AND created_at = ? ALLOW FILTERING;`,
 
   insertIntoCreatedAt: `
     INSERT INTO ${env.SCYLLADB_KEYSPACE}.comments_by_created_at (
@@ -29,7 +28,7 @@ export const commentQueries = {
     INSERT INTO ${env.SCYLLADB_KEYSPACE}.comments_by_rating_score (
       video_id, rating_score, comment_id, user_id, content,
       created_at, updated_at, edited, likes_count, dislikes_count, reply_count, username
-    ) VALUES (?, ?, ?, ?, ?, ?, toTimestamp(now()), ?, ?, ?, ?, username)`,
+    ) VALUES (?, ?, ?, ?, ?, ?, toTimestamp(now()), ?, ?, ?, ?, ?)`,
 
   updateCreatedAt: `
     UPDATE ${env.SCYLLADB_KEYSPACE}.comments_by_created_at
