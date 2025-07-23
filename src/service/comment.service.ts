@@ -3,33 +3,43 @@ import { scyllaClient } from "../config/db";
 import { commentQueries } from "../queries/comment.queries";
 import { generateUUID, getRating } from "../utils/helper";
 import { logger } from "../utils/logger";
-import { types } from "cassandra-driver";
 
 export const fetchAllCommentsService = async (req: Request) => {
   const { video_id } = req.params;
   const { cursor, limit = 4, sort } = req.query;
-  const created_at = cursor || new Date().toISOString();
+  const fetchSize = +limit || 4;
+  const pageState = cursor || null;
+
+  let rows: any[] = [];
+  let nextPageState: string | undefined;
+
+  const options = {
+    prepare: true,
+    fetchSize,
+    pageState,
+  };
 
   let result;
+  let params;
+  let query;
+  params = [video_id];
   if (sort === "rated") {
-    result = await scyllaClient.execute(
-      commentQueries.getByRating,
-      [video_id, +limit],
-      { prepare: true }
-    );
+    query = commentQueries.getByRating;
   } else {
-    result = await scyllaClient.execute(
-      commentQueries.getComments,
-      [video_id, created_at, +limit],
-      { prepare: true }
-    );
+    query = commentQueries.getComments;
   }
+
+  result = await scyllaClient.execute(query, params, options);
+  console.log(result);
 
   logger.info("Comments fetched", { video_id, count: result.rowLength });
   return {
     message: "Comments fetched",
     success: true,
-    data: result.rows || [],
+    data: {
+      comments: result.rows || [],
+      nextPageState: result.pageState,
+    },
   };
 };
 
@@ -144,32 +154,22 @@ export const updateCommentsService = async (req: Request) => {
       { prepare: true }
     ),
     scyllaClient.execute(
-      commentQueries.deleteFromRatingScore,
-      [video_id, rating_score, comment_id],
-      {
-        prepare: true,
-      }
+      commentQueries.updateRating,
+      [
+        content,
+        rating_score,
+        likes_count,
+        dislikes_count,
+        reply_count,
+        video_id,
+        created_at,
+        comment_id,
+      ],
+      { prepare: true }
     ),
   ];
 
   await Promise.all(commentQuery);
-  await scyllaClient.execute(
-    commentQueries.insertIntoRatingScore,
-    [
-      video_id,
-      rating_score,
-      comment_id,
-      user_id,
-      content,
-      created_at,
-      true,
-      likes_count,
-      dislikes_count,
-      reply_count,
-      username,
-    ],
-    { prepare: true }
-  );
   logger.info("Comment updated", { comment_id });
   return {
     message: "Comment updated",

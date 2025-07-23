@@ -3,13 +3,11 @@ import { env } from "../config/env";
 export const commentQueries = {
   getByRating: `
     SELECT * FROM ${env.SCYLLADB_KEYSPACE}.comments_by_rating_score
-    WHERE video_id = ?
-    LIMIT ?`,
+    WHERE video_id = ?`,
 
   getComments: `
     SELECT * FROM ${env.SCYLLADB_KEYSPACE}.comments_by_created_at
-    WHERE video_id = ? AND created_at < ?
-    LIMIT ?`,
+    WHERE video_id = ?`,
 
   getCommentsByUserId: `
     SELECT * FROM ${env.SCYLLADB_KEYSPACE}.comments_by_created_at
@@ -32,6 +30,12 @@ export const commentQueries = {
     ) VALUES (?, ?, ?, ?, ?, ?, toTimestamp(now()), ?, ?, ?, ?, ?)`,
 
   updateCreatedAt: `
+    UPDATE ${env.SCYLLADB_KEYSPACE}.comments_by_created_at
+    SET content = ?, edited = true, updated_at = toTimestamp(now()), rating_score = ?,
+    likes_count = ?, dislikes_count = ?, reply_count = ?
+    WHERE video_id = ? AND created_at = ? AND comment_id = ? `,
+
+  updateRating: `
     UPDATE ${env.SCYLLADB_KEYSPACE}.comments_by_created_at
     SET content = ?, edited = true, updated_at = toTimestamp(now()), rating_score = ?,
     likes_count = ?, dislikes_count = ?, reply_count = ?

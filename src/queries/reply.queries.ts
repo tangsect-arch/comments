@@ -1,7 +1,7 @@
 import { env } from "../config/env";
 
 export const replyQueries = {
-  getByCommentId: `SELECT * FROM ${env.SCYLLADB_KEYSPACE}.replies WHERE comment_id = ? AND created_at > ?  LIMIT ?`,
+  getByCommentId: `SELECT * FROM ${env.SCYLLADB_KEYSPACE}.replies WHERE comment_id = ? `,
   getByReplyId: `SELECT * FROM ${env.SCYLLADB_KEYSPACE}.replies WHERE comment_id = ? AND reply_id = ? ALLOW FILTERING`,
   insert: `INSERT INTO ${env.SCYLLADB_KEYSPACE}.replies (reply_id, comment_id, user_id, content, created_at, updated_at, edited, likes_count, dislikes_count, username)
            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,

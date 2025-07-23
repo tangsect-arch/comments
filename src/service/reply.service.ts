@@ -8,23 +8,32 @@ import { commentQueries } from "../queries/comment.queries";
 export const fetchAllRepliesService = async (req: Request) => {
   const { comment_id } = req.params;
   const { cursor, limit = 4 } = req.query;
-  const created_at =
-    cursor ||
-    new Date(
-      new Date().setFullYear(new Date().getFullYear() - 1)
-    ).toISOString();
+  const fetchSize = +limit || 4;
+  const pageState = cursor || null;
+
+  let rows: any[] = [];
+  let nextPageState: string | undefined;
+
+  const options = {
+    prepare: true,
+    fetchSize,
+    pageState,
+  };
 
   const result = await scyllaClient.execute(
     replyQueries.getByCommentId,
-    [comment_id, created_at, +limit],
-    { prepare: true }
+    [comment_id],
+    options
   );
 
   logger.info("Replies fetched", { comment_id, count: result.rowLength });
   return {
     message: "Replies fetched",
     success: true,
-    data: result.rows || [],
+    data: {
+      replies: result.rows || [],
+      nextPageState: result.pageState,
+    },
   };
 };
 
