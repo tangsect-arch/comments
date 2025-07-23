@@ -232,6 +232,16 @@ export const deleteCommentService = async (req: Request) => {
 };
 
 export const likeDislikeACommentService = async (req: Request) => {
+  const { liked, user_id, username } = req.body;
+
+  const { video_id, comment_id } = req.params;
+
+  const result = await scyllaClient.execute(
+    commentQueries.getCommentsById,
+    [video_id, comment_id],
+    { prepare: true }
+  );
+
   const {
     created_at,
     content,
@@ -239,13 +249,9 @@ export const likeDislikeACommentService = async (req: Request) => {
     dislikes_count,
     reply_count,
     rating_score,
-    user_id,
-    liked,
     edited,
-    username,
-  } = req.body;
+  } = result.rows[0];
 
-  const { video_id, comment_id } = req.params;
   const created_at_string = created_at as string;
   const date = new Date(created_at_string);
 
